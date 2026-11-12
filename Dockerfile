@@ -58,6 +58,6 @@ VOLUME /config
 
 COPY --from=app-builder /src/bin/syncyomi /usr/local/bin/
 
-EXPOSE 8282
+EXPOSE 10000
 
-ENTRYPOINT ["/usr/local/bin/syncyomi", "--config", "/config"]
+ENTRYPOINT ["/bin/sh", "-c", "if [ ! -f /config/config.toml ]; then printf 'host = \"0.0.0.0\"\\nport = %s\\n' \"${PORT:-10000}\" > /config/config.toml; fi; exec /usr/local/bin/syncyomi --config /config"]
